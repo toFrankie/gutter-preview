@@ -1,19 +1,18 @@
 {
-  "name": "vscode-gutter-preview",
+  "name": "vscode-gutter-preview-frankie",
   "private": true,
   "description": "Shows image preview in the gutter and on hover",
-  "author": "Tamas Kiss",
-  "publisher": "kisstkondoros",
+  "publisher": "Frankie",
   "license": "MIT",
-  "version": "0.30.0",
-  "displayName": "Image preview",
+  "version": "0.0.1",
+  "displayName": "Image preview (Frankie)",
   "icon": "images/logo.png",
   "engines": {
     "vscode": "^1.64.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kisstkondoros/gutter-preview.git"
+    "url": "https://github.com/toFrankie/gutter-preview"
   },
   "keywords": [
     "vscode",
