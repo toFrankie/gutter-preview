@@ -1,3 +1,4 @@
+import RegexParser from 'regex-parser';
 import {
     InitializeResult,
     IPCMessageReader,
@@ -97,6 +98,13 @@ async function collectEntries(
         absoluteUrlMapper.refreshConfig(request.workspaceFolder, request.additionalSourcefolder, request.paths)
     );
 
+    const configuration = await connection.workspace.getConfiguration({
+        scopeUri: document.uri,
+        section: 'gutterpreview',
+    });
+
+    const regexList = configuration.detectNetworkImageUrls.map((p: string) => RegexParser(p));
+
     const lines = document.getText().split(/\r\n|\r|\n/);
     for (const lineIndex of request.visibleLines) {
         var line = lines[lineIndex];
@@ -138,10 +146,13 @@ async function collectEntries(
 
                     let absoluteUrlsSet = new Set(absoluteUrls);
 
+                    // TODO: Filter out only [ http ] cases
+
                     items = items.concat(
                         Array.from(absoluteUrlsSet.values()).map((absoluteImagePath) => {
                             const result =
-                                convertToLocalImagePath(absoluteImagePath, urlMatch) || Promise.resolve(null);
+                                convertToLocalImagePath(absoluteImagePath, urlMatch, regexList) ||
+                                Promise.resolve(null);
                             return result.catch((p) => null);
                         })
                     );
@@ -150,10 +161,15 @@ async function collectEntries(
     }
     return await Promise.all(items);
 }
-async function convertToLocalImagePath(absoluteImagePath: string, urlMatch: UrlMatch): Promise<ImageInfo> {
+async function convertToLocalImagePath(
+    absoluteImagePath: string,
+    urlMatch: UrlMatch,
+    regexList: RegExp[]
+): Promise<ImageInfo> {
     if (absoluteImagePath) {
         let isDataUri = absoluteImagePath.indexOf('data:image') == 0;
         let isExtensionSupported: boolean;
+        let isRegexSupported: boolean;
 
         if (!isDataUri) {
             const absoluteImageUrl = URI.parse(absoluteImagePath);
@@ -162,6 +178,9 @@ async function convertToLocalImagePath(absoluteImagePath: string, urlMatch: UrlM
                 isExtensionSupported = acceptedExtensions.some(
                     (ext) => absolutePath && absolutePath.ext && absolutePath.ext.toLowerCase().startsWith(ext)
                 );
+                if (!isExtensionSupported && absoluteImagePath.includes('https://') && regexList.length) {
+                    isRegexSupported = regexList.some((regex) => regex.test(absoluteImagePath));
+                }
             }
         }
 
@@ -171,7 +190,7 @@ async function convertToLocalImagePath(absoluteImagePath: string, urlMatch: UrlM
 
         absoluteImagePath = absoluteImagePath.replace(/\|(width=\d*)?(height=\d*)?/gm, '');
 
-        if (isDataUri || isExtensionSupported) {
+        if (isDataUri || isExtensionSupported || isRegexSupported) {
             if (isDataUri) {
                 return Promise.resolve({
                     originalImagePath: absoluteImagePath,
