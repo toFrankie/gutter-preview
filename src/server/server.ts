@@ -178,7 +178,7 @@ async function convertToLocalImagePath(
                 isExtensionSupported = acceptedExtensions.some(
                     (ext) => absolutePath && absolutePath.ext && absolutePath.ext.toLowerCase().startsWith(ext)
                 );
-                if (!isExtensionSupported && absoluteImagePath.includes('https://') && regexList.length) {
+                if (!isExtensionSupported && absoluteImagePath.includes('http://') && regexList.length) {
                     isRegexSupported = regexList.some((regex) => regex.test(absoluteImagePath));
                 }
             }
