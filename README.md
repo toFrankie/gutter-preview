@@ -1,6 +1,12 @@
 # Image Preview - Visual Studio Code Extension
 
-> This project was forked from [kisstkondoros/gutter-preview](https://github.com/kisstkondoros/gutter-preview) `v0.30.0`. It supports image link detection without extension. I'll consider submitting a PR once it's stable.
+> [!NOTE]
+>
+> This project was forked from [kisstkondoros/gutter-preview](https://github.com/kisstkondoros/gutter-preview) `v0.30.0`.
+>
+> 🆕 Feature: Support configuring `gutterpreview.urlDetectionPatterns` to detect some image URLs without extension name. such as `https://example.com/pic/640?fmt=jpeg`.
+>
+> I'll consider submitting a PR once it's stable.
 
 Shows image preview in the gutter and on hover
 

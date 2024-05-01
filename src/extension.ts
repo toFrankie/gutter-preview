@@ -223,7 +223,7 @@ export function activate(context: ExtensionContext) {
     };
 
     vscode.workspace.onDidChangeConfiguration((event) => {
-        if (event.affectsConfiguration('gutterpreview.detectNetworkImageUrls')) {
+        if (event.affectsConfiguration('gutterpreview.urlDetectionPatterns')) {
             imageDecorator(symbolUpdater, context, client);
         }
     });

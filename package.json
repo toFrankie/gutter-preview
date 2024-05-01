@@ -4,7 +4,7 @@
   "description": "Shows image preview in the gutter and on hover",
   "publisher": "Frankie",
   "license": "MIT",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "displayName": "Image preview (Frankie)",
   "icon": "images/logo.png",
   "engines": {
@@ -78,10 +78,10 @@
           "description": "A flag which indicates whether resources should be resolved from references",
           "type": "boolean"
         },
-        "gutterpreview.detectNetworkImageUrls": {
+        "gutterpreview.urlDetectionPatterns": {
           "default": [],
           "scope": "resource",
-          "description": "Detect network image url without extension name, like `https://example.com/pic/640?fmt=jpeg`.",
+          "markdownDescription": "Sometimes image URLs without extensions (such as `https://example.com/pic/640?fmt=jpeg`) are not detected. You can now specify regular expressions to detect these URLs. configured values (such as `/^http(s)*://example.com/pic/i`) will be parsed using [regex-parser](https://github.com/IonicaBizau/regex-parser.js) and ignored if they are illegal regular expression strings.",
           "type": "array"
         }
       }
